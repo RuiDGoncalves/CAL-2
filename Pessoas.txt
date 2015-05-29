@@ -1,0 +1,215 @@
+0
+Cavaco Silva
+
+1
+Luis Filipe Vieira
+
+2
+Marcelo Altifalente
+
+3
+Helder Costa
+
+4
+Humberto Delgado
+
+5
+Pinto Da Costa
+
+6
+Miguel Silva
+
+7
+Pedro Silva
+
+8
+Gustavo Saldenha
+
+9
+Marcelo Andrade
+
+10
+Sergio Dominges
+
+11
+Diogo Carneiro
+
+12
+Ines Moura
+
+13
+Ana Moura
+
+14
+Jorge Jesus
+
+15
+Julio Cesar
+
+16
+Fernando Fernades
+
+17
+Simao Simoes
+
+18
+Domingos Domingues
+
+19
+Rodrigo Rodrigues
+
+20
+Nuno Nunes
+
+21
+Helder Costa
+
+22
+Simara Maia
+
+23
+Pinto Da Costa
+
+24
+Carolina Salgado
+
+25
+Humberto Delgado
+
+26
+Afonso Castro
+
+27
+Pedro Castro
+
+28
+Miguel Silva
+
+29
+Tiago Reis
+
+30
+Daniel Reis
+
+31
+Henriqueta Fernandes
+
+32
+Emanuel Costa
+
+33
+Francisca Paulo
+
+34
+Maria Joao Santos
+
+35
+Claudia Gouveia Delgado
+
+36
+Claudia Costa
+
+37
+Cristina Sacramento
+
+38
+Marcelo Judas
+
+39
+Gustavo Castro
+
+40
+Luis Trindade
+
+41
+Alakbah Mohamed
+
+42
+Gank Plank
+
+43
+Varus Celtas
+
+44
+Ana Bacelar
+
+45
+Ines Moura
+
+46
+Ana Moura
+
+47
+Ana Rita
+
+48
+Gabriel Souto
+
+49
+Marcelo Bacelar
+
+50
+Ana Bacelar
+
+51
+Passos Dias Aguiar Mota
+
+52
+Nuno Florentino
+
+52
+Ricardo Bras
+
+53
+Jorge Sampaio
+
+54
+Augusta Santos
+
+55
+João Sampaio
+
+56
+Maria Gaiato
+
+57
+Maria Henriqueta Fernandes
+
+58
+Vasco Afonso
+
+59
+Joana Fernandes
+
+60
+João Silva
+
+61
+Luis Figueiredo
+
+62
+Ana Sa
+
+63
+Fernando Vale
+
+64
+Filipe Domingues
+
+65
+Pedro Azevedo
+
+66
+Helder Sampaio
+
+67
+Mariana Figueiredo
+
+68
+Claudia Diogo
+
+69
+Sergio Castro
+
+70
+Vitor Teixeira
