@@ -28,7 +28,7 @@ bool Pessoa::operator==(const Pessoa& p1){
     else return false;
  }
 
-void loadPessoas(string filename,Graph<Pessoa> &graph, vector<Pessoa> pessoas){
+void loadPessoas(string filename,Graph<Pessoa> &graph, vector<Pessoa> &pessoas){
 	ifstream file;
 	file.open(filename.c_str());
 	int id;
@@ -50,7 +50,7 @@ void loadPessoas(string filename,Graph<Pessoa> &graph, vector<Pessoa> pessoas){
 	file.close();
 }
 
-void loadAmizades(string filename,Graph<Pessoa> &graph, vector<Pessoa> pessoas){
+void loadAmizades(string filename,Graph<Pessoa> &graph, vector<Pessoa> &pessoas){
 	ifstream file;
 	file.open(filename.c_str());
 	int id, id_amigo;
@@ -59,14 +59,20 @@ void loadAmizades(string filename,Graph<Pessoa> &graph, vector<Pessoa> pessoas){
 	while(!file.eof()){
 		file >> id;
 		file.ignore();
-		if(id > pessoas.size())
+		if(id > pessoas.size()){
+//			cout << "ID - " << id << endl;
+//			return;
 			throw ExceptionPersontNotFound();
+		}
 
 		while(!file.eof() && (char) file.peek() != '\n'){
 			file >> id_amigo;
 			file.ignore();
-			if(id_amigo > pessoas.size())
+			if(id_amigo > pessoas.size()){
 				throw ExceptionPersontNotFound();
+//				cout << "ID " << id << ", IDamigo - " << id_amigo << endl;
+//				return;
+			}
 			graph.addEdge(pessoas[id], pessoas[id_amigo], 1);
 		}
 

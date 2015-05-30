@@ -22,5 +22,5 @@ public:
 	bool operator==(const Pessoa& p1);
 };
 
-void loadPessoas(string filename, Graph<Pessoa*> &graph);
-void loadAmizades(string filename, Graph<Pessoa*> &graph);
+void loadPessoas(string filename, Graph<Pessoa> &graph, vector<Pessoa> &pessoas);
+void loadAmizades(string filename, Graph<Pessoa> &graph, vector<Pessoa> &pessoas);
