@@ -18,10 +18,12 @@ using namespace std;
 class searchDistance{
 	float stringPercentage;
 	int friendshipDistance;
+	int matchPosition;
 public:
-	searchDistance(float sPerc, int fDist){
+	searchDistance(float sPerc, int fDist, int mPos){
 		this->stringPercentage = sPerc;
 		this->friendshipDistance = fDist;
+		this->matchPosition = mPos;
 	}
 
 	float getStringPercentage(){
@@ -30,9 +32,15 @@ public:
 	int getFriendshipDistance(){
 		return this->friendshipDistance;
 	}
+	int getMatchPosition(){
+		return this->matchPosition;
+	}
 	bool operator<(const searchDistance b)const{
-		if (stringPercentage == b.stringPercentage)
-			return friendshipDistance > b.friendshipDistance;
+		if (stringPercentage == b.stringPercentage){
+			if(matchPosition == b.matchPosition)
+				return friendshipDistance > b.friendshipDistance;
+			return matchPosition > b.matchPosition;
+		}
 		return stringPercentage < b.stringPercentage;
 	}
 };
@@ -45,46 +53,41 @@ public:
 
 };
 
+vector<string> stringToVector(string name){
+	stringstream ss(name);
+	vector<string> returnVec;
+	while(!ss.eof()){
+		string tempString;
+		ss >> tempString;
+		returnVec.push_back(tempString);
+	}
+
+	return returnVec;
+}
+
 priority_queue<pair<searchDistance,string>, vector<pair<searchDistance,string> >, orderPair> getDistance(string target, Graph<Pessoa> redeAmizades){
 	priority_queue<pair<searchDistance,string>, vector<pair<searchDistance,string> >, orderPair> resultadosOrdenados;
 
 	vector<Vertex<Pessoa> *> targets = redeAmizades.getVertexSet();
 
-	stringstream ss(target);
-	vector<string> targetVec;
-	while(!ss.eof()){
-		string tempString;
-		ss >> tempString;
-		targetVec.push_back(tempString);
-	}
-	for(unsigned int i = 0; i < targetVec.size(); i++)
-		cout << targetVec[i];
-	cout << endl;
-	for(unsigned int i = 0; i < targets.size(); i++){
+	vector<string> targetVec = stringToVector(target);
+	for(unsigned int i = 1; i < targets.size(); i++){	//O ciclo começa a 1 para ignorar o utilizador, que é o elemento nº 0 do vector
 		Vertex<Pessoa> * v = targets[i];
-		int fDist = v->getDist();
 		string name = v->getInfo().getNome();
-		vector<string> nameVec;
-		stringstream ss2(name);
-		while(!ss2.eof()){
-			string tempString;
-			ss2 >> tempString;
-			nameVec.push_back(tempString);
-		}
-		for(int i = 0; i < nameVec.size(); i++){
-			cout << nameVec[i];
-		}
-		cout << endl;
+		vector<string> nameVec = stringToVector(name);
+
 		int matches = 0;
-		for(unsigned int i = 0; i < targetVec.size(); i++)
-			for(unsigned int j = 0; j < nameVec.size(); j++)
-				if(editDistance(nameVec[j], targetVec[i]) == 0)
+		int mPos = 0;
+		for(unsigned int j = 0; j < targetVec.size(); j++)
+			for(unsigned int k = 0; k < nameVec.size(); k++)
+				if(editDistance(nameVec[k], targetVec[j]) == 0){
+					mPos = k;
 					matches++;
-
-
+				}
 
 		float sDist = ((float)matches )/targetVec.size();
-		searchDistance distance(sDist, fDist);
+		int fDist = v->getDist();
+		searchDistance distance(sDist, fDist, mPos);
 		pair<searchDistance, string> par(distance, name);
 		resultadosOrdenados.push(par);
 
@@ -93,36 +96,37 @@ priority_queue<pair<searchDistance,string>, vector<pair<searchDistance,string> >
 	return resultadosOrdenados;
 }
 
+void printResultados(priority_queue<pair<searchDistance,string>, vector<pair<searchDistance,string> >, orderPair> resultadosOrdenados){
+	int i = 0;
+	while(!resultadosOrdenados.empty()){
+		i++;
+		pair<searchDistance, string> par = resultadosOrdenados.top();
+		resultadosOrdenados.pop();
+		//cout << par.first.getStringPercentage() << " " << par.first.getFriendshipDistance() << " " << par.second << endl;
+		cout << i << "-" << par.second << endl;
+	}
+}
+
 int main(){
 	Graph<Pessoa> redeSocial;
 
 
 	vector<Pessoa> pessoas;
 	loadPessoas("Pessoas.txt", redeSocial, pessoas);
-//	cout << "Tamanho pessoas - " << pessoas.size() << endl;
-//	for(int i = 0; i < pessoas.size(); i++)
-//		cout << pessoas[i].getNome() << endl;
-//	cout << endl;
 
 	loadAmizades("Amizades.txt", redeSocial, pessoas);
 
 	vector<Vertex<Pessoa>*> vertexSet = redeSocial.getVertexSet();
-//	for(int i = 0; i < vertexSet.size(); i++){
-//		Vertex<Pessoa> * v = vertexSet[i];
-//		cout << "User: " << v->getInfo().getNome() << endl;
-//		cout << "Amigos\n";
-//		for(int j = 0; j < v->getAdj().size(); j++){
-//			Vertex<Pessoa>* amigo = v->getAdj()[j].getDest();
-//			cout << amigo->getInfo().getNome() << endl;
-//		}
-//		cout << endl;
-//	}
 	redeSocial.unweightedShortestPath(pessoas[0]);
-	priority_queue<pair<searchDistance,string>, vector<pair<searchDistance,string> >, orderPair> resultadosOrdenados =  getDistance("Sergio Silva", redeSocial);
-	while(!resultadosOrdenados.empty()){
-		pair<searchDistance, string> par = resultadosOrdenados.top();
-		resultadosOrdenados.pop();
-		cout << par.first.getStringPercentage() << " " << par.first.getFriendshipDistance() << " " << par.second << endl;
+	string inputSearch;
+	priority_queue<pair<searchDistance,string>, vector<pair<searchDistance,string> >, orderPair> resultadosOrdenados;
+	while(1){
+		cout << "Procure por um utilizador. Se quiser sair insira 'exit'\nProcura: ";
+		getline(cin, inputSearch);
+		if(inputSearch == "exit")
+			break;
+		resultadosOrdenados =  getDistance(inputSearch, redeSocial);
+		printResultados(resultadosOrdenados);
 	}
 	return 0;
 }
