@@ -15,15 +15,31 @@
 
 using namespace std;
 
+
 class searchDistance{
 	float stringPercentage;
 	int friendshipDistance;
 	int matchPosition;
+	vector<string> target;
+	vector<string> name;
 public:
-	searchDistance(float sPerc, int fDist, int mPos){
+	searchDistance(float sPerc, int fDist, int mPos, vector<string> target, vector<string> name){
 		this->stringPercentage = sPerc;
 		this->friendshipDistance = fDist;
 		this->matchPosition = mPos;
+		this->target = target;
+		this->name = name;
+	}
+
+	static int getMinLevenshteinDistance(vector<string> &target, vector<string> &name){
+		int minDistance = 9999999;
+		for(unsigned int j = 0; j < target.size(); j++)
+			for(unsigned int k = 0; k < name.size(); k++){
+				int levenshteinDistance = editDistance(name[k], target[j]);
+				if(levenshteinDistance < minDistance)
+					minDistance = levenshteinDistance;
+			}
+		return minDistance;
 	}
 
 	float getStringPercentage(){
@@ -35,15 +51,34 @@ public:
 	int getMatchPosition(){
 		return this->matchPosition;
 	}
+
+	int getMinLevenshteinDistance(const vector<string> &target,const vector<string> &name) const{
+		int minDistance = 9999999;
+		for(unsigned int j = 0; j < target.size(); j++)
+			for(unsigned int k = 0; k < name.size(); k++){
+				int levenshteinDistance = editDistance(name[k], target[j]);
+				if(levenshteinDistance < minDistance)
+					minDistance = levenshteinDistance;
+			}
+		return minDistance;
+	}
+
 	bool operator<(const searchDistance b)const{
 		if (stringPercentage == b.stringPercentage){
-			if(matchPosition == b.matchPosition)
-				return friendshipDistance > b.friendshipDistance;
+			if(matchPosition == b.matchPosition){
+				int distance = getMinLevenshteinDistance(target, name);
+				int bDistance = b.getMinLevenshteinDistance(b.target, b.name);
+				if(distance == bDistance)
+					return friendshipDistance > b.friendshipDistance;
+				return distance > bDistance;
+			}
 			return matchPosition > b.matchPosition;
 		}
 		return stringPercentage < b.stringPercentage;
 	}
 };
+
+
 
 class orderPair{
 public:
@@ -53,7 +88,7 @@ public:
 
 };
 
-vector<string> stringToVector(string name){
+vector<string> stringToVector(string &name){
 	stringstream ss(name);
 	vector<string> returnVec;
 	while(!ss.eof()){
@@ -65,7 +100,7 @@ vector<string> stringToVector(string name){
 	return returnVec;
 }
 
-priority_queue<pair<searchDistance,string>, vector<pair<searchDistance,string> >, orderPair> getDistance(string target, Graph<Pessoa> redeAmizades){
+priority_queue<pair<searchDistance,string>, vector<pair<searchDistance,string> >, orderPair> getDistance(string &target, Graph<Pessoa> &redeAmizades){
 	priority_queue<pair<searchDistance,string>, vector<pair<searchDistance,string> >, orderPair> resultadosOrdenados;
 
 	vector<Vertex<Pessoa> *> targets = redeAmizades.getVertexSet();
@@ -87,7 +122,7 @@ priority_queue<pair<searchDistance,string>, vector<pair<searchDistance,string> >
 
 		float sDist = ((float)matches )/targetVec.size();
 		int fDist = v->getDist();
-		searchDistance distance(sDist, fDist, mPos);
+		searchDistance distance(sDist, fDist, mPos, targetVec, nameVec);
 		pair<searchDistance, string> par(distance, name);
 		resultadosOrdenados.push(par);
 
@@ -96,7 +131,7 @@ priority_queue<pair<searchDistance,string>, vector<pair<searchDistance,string> >
 	return resultadosOrdenados;
 }
 
-void printResultados(priority_queue<pair<searchDistance,string>, vector<pair<searchDistance,string> >, orderPair> resultadosOrdenados){
+void printResultados(priority_queue<pair<searchDistance,string>, vector<pair<searchDistance,string> >, orderPair> &resultadosOrdenados){
 	int i = 0;
 	while(!resultadosOrdenados.empty()){
 		i++;
